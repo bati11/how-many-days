@@ -13,17 +13,52 @@
         <h1>How many days</h1>
     </header>
     <article class="contents">
-        <h1><span id="days" class="days"></span>&nbsp;days</h1>
+        <div class="answer-box">
+            <div id="yearsBox">
+                <div id="yearsValue" class="value"></div>
+                <div>&nbsp;years</div>
+            </div>
+            <div id="andText">and</div>
+            <div id="daysBox">
+                <div id="daysValue" class="value"></div>
+                <div>&nbsp;days</div>
+            </div>
+        </div>
         <p>from <span class="title">{{ .Title }}</span></p>
+        <div>
+            <button id="showDays">days</button>
+            <button id="showYears">years</button>
+        </div>
     </article>
 </div>
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
 <script>
+    function showDays() {
+        $("#daysValue").text(Math.floor(diffDays));
+        $("#yearsBox").hide();
+        $("#andText").hide();
+        $("#daysBox").show();
+    }
+    function showYears() {
+        var years = Math.floor(diffDays / 365);
+        $("#yearsValue").text(years)
+        $("#daysValue").text(Math.floor(diffDays) - (365 * years));
+        if (years > 0) {
+            $("#yearsBox").show();
+            $("#andText").show();
+        } else {
+            $("#yearsBox").hide();
+            $("#andText").hide();
+        }
+        $("#daysBox").show();
+    }
     var date = Date.parse({{ .Date }});
     var diffMilliSec = new Date().getTime() - date;
     var diffDays = diffMilliSec / (1000 * 60 * 60 * 24)
-    $("#days").text(Math.floor(diffDays))
+    showDays();
     $(".container").show();
+    $("#showDays").click(showDays);
+    $("#showYears").click(showYears);
 </script>
 </body>
 </html>

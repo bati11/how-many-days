@@ -23,6 +23,7 @@ body {
 }
 
 .contents {
+    color: #808080;
     text-align: center;
     padding-top: 32px;
 }
@@ -32,10 +33,17 @@ input {
     margin-bottom: 32px;
 }
 
-.days {
+.answer-box {
+    font-size: 4rem;
+    margin-bottom: 48px;
+}
+
+.value {
+    color: #1e90ff;
     font-size: 8rem;
 }
 
 .title {
+    color: #333;
     font-size: 3rem;
 }
