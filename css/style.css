@@ -25,12 +25,16 @@ body {
 .contents {
     color: #808080;
     text-align: center;
-    padding-top: 32px;
+    padding: 32px 8px 0;
 }
 
 input {
     font-size: 4rem;
     margin-bottom: 32px;
+}
+
+.input {
+    width: 100%;
 }
 
 .answer-box {
