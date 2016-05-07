@@ -11,7 +11,6 @@ import (
 )
 
 type Anniversary struct {
-	Uuid  string
 	Date  time.Time
 	Title string
 }
@@ -44,34 +43,28 @@ func add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	anniversary := Anniversary{
-		Uuid: strings.Replace(uuid.NewV4().String(), "-", "", -1),
 		Date: date,
 		Title: title,
 	}
-	key := datastore.NewIncompleteKey(c, "Anniversary", nil)
+	stringID := strings.Replace(uuid.NewV4().String(), "-", "", -1)
+	key := datastore.NewKey(c, "Anniversary", stringID, 0, nil)
 	key, err = datastore.Put(c, key, &anniversary)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/show/" + anniversary.Uuid, http.StatusFound)
+	http.Redirect(w, r, "/show/" + stringID, http.StatusFound)
 }
 
 func show(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	uuid := r.URL.Path[6:]
-	var annversaries []Anniversary
-	q := datastore.NewQuery("Anniversary").Filter("Uuid =", uuid)
-	if _, err := q.GetAll(c, &annversaries); err != nil {
+	key := datastore.NewKey(c, "Anniversary", uuid, 0, nil)
+	var anniversary Anniversary
+	if err := datastore.Get(c, key, &anniversary); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
-	if len(annversaries) == 0 {
-		http.NotFound(w, r);
-		return
-	}
-	annversary := annversaries[0]
-	if err := showPageTemplate.Execute(w, &annversary); err != nil {
+	if err := showPageTemplate.Execute(w, &anniversary); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
