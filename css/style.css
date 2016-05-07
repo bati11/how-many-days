@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+html {
+    font-size: 62.5%;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+h1 {
+    margin: 0;
+}
+
+body {
+    color: #333;
+    font-size: 1.2rem;
+    font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+.header {
+    background-color: #fafad2;
+    padding: 16px;
+}
+
+.contents {
+    text-align: center;
+    padding-top: 32px;
+}
+
+input {
+    font-size: 4rem;
+    margin-bottom: 32px;
+}
+
+.days {
+    font-size: 8rem;
+}
+
+.title {
+    font-size: 3rem;
+}

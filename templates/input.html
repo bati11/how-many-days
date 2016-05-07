@@ -2,13 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Input</title>
+    <meta name="viewport" content="width=device-width">
+    <title>How many days</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-    <form action="/add" method="post">
-        <p><label for="title">Title</label>&nbsp;<input id="title" type="text" name="title" placeholder="e.g. Birth day"/></p>
-        <p><label for="date">Date</label>&nbsp;<input id="date" type="date" name="date" placeholder="2011-10-02"/></p>
-        <p><input type="submit" /></p>
-    </form>
+<div class="container">
+    <header class="header">
+        <h1>How many days</h1>
+    </header>
+    <article class="contents">
+        <form action="/add" method="post">
+            <p><input id="title" type="text" name="title" placeholder="e.g. Birth day"/></p>
+            <p><input id="date" type="date" name="date" placeholder="2011-10-02"/></p>
+            <p><input type="submit" value="Submit"/></p>
+        </form>
+    </article>
+</div>
 </body>
 </html>
