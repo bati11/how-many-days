@@ -2,14 +2,53 @@ package how_many_days
 
 import (
 	"net/http"
+	"time"
+	"html/template"
+	"github.com/golang/appengine"
+	"github.com/golang/appengine/datastore"
 	"fmt"
+	"strconv"
 )
 
+type Anniversary struct {
+	Date  time.Time
+	Title string
+}
+
+var inputPageTemplate = template.Must(template.ParseFiles("templates/input.html"))
+
 func init() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", root)
+	http.HandleFunc("/add", add)
+	http.HandleFunc("/show/", show)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, world!")
+func root(w http.ResponseWriter, r *http.Request) {
+	if err := inputPageTemplate.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
+func add(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	date, err := time.Parse("2006-01-02", r.FormValue("date"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	anniversary := Anniversary{
+		Date: date,
+		Title: r.FormValue("title"),
+	}
+	key := datastore.NewIncompleteKey(c, "Anniversary", nil)
+	key, err = datastore.Put(c, key, &anniversary)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/show/" + strconv.FormatInt(key.IntID(), 10), http.StatusFound)
+}
+
+func show(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, %q", r.URL.Path[1:])
+}
