@@ -1,0 +1,6 @@
+indexes:
+- kind: Anniversary
+  ancestor: false
+  properties:
+  - name: Uuid
+    direction: asc

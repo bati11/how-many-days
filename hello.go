@@ -6,10 +6,12 @@ import (
 	"html/template"
 	"github.com/golang/appengine"
 	"github.com/golang/appengine/datastore"
-	"strconv"
+	"github.com/satori/go.uuid"
+	"strings"
 )
 
 type Anniversary struct {
+	Uuid  string
 	Date  time.Time
 	Title string
 }
@@ -37,6 +39,7 @@ func add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	anniversary := Anniversary{
+		Uuid: strings.Replace(uuid.NewV4().String(), "-", "", -1),
 		Date: date,
 		Title: r.FormValue("title"),
 	}
@@ -46,18 +49,23 @@ func add(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/show/" + strconv.FormatInt(key.IntID(), 10), http.StatusFound)
+	http.Redirect(w, r, "/show/" + anniversary.Uuid, http.StatusFound)
 }
 
 func show(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	id, err := strconv.ParseInt(r.URL.Path[6:], 10, 64)
-	if err != nil {
+	uuid := r.URL.Path[6:]
+	var annversaries []Anniversary
+	q := datastore.NewQuery("Anniversary").Filter("Uuid =", uuid)
+	if _, err := q.GetAll(c, &annversaries); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var annversary Anniversary
-	datastore.Get(c, datastore.NewKey(c, "Anniversary", "", id, nil), &annversary)
+	if len(annversaries) == 0 {
+		http.NotFound(w, r);
+		return
+	}
+	annversary := annversaries[0]
 	if err := showPageTemplate.Execute(w, &annversary); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
