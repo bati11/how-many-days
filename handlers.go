@@ -33,15 +33,20 @@ func root(w http.ResponseWriter, r *http.Request) {
 
 func add(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	title := r.FormValue("title")
+	if title == "" {
+		http.Error(w, "title should be present", http.StatusBadRequest)
+		return
+	}
 	date, err := time.Parse("2006-01-02", r.FormValue("date"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "date format should be '2016-05-12'", http.StatusBadRequest)
 		return
 	}
 	anniversary := Anniversary{
 		Uuid: strings.Replace(uuid.NewV4().String(), "-", "", -1),
 		Date: date,
-		Title: r.FormValue("title"),
+		Title: title,
 	}
 	key := datastore.NewIncompleteKey(c, "Anniversary", nil)
 	key, err = datastore.Put(c, key, &anniversary)

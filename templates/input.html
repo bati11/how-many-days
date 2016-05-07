@@ -14,11 +14,49 @@
     </header>
     <article class="contents">
         <form action="/add" method="post">
-            <p><input class="input" type="text" name="title" placeholder="e.g. Birth day"/></p>
-            <p><input class="input" type="date" name="date" placeholder="e.g. 2011-10-02"/></p>
-            <p><input type="submit" value="Submit"/></p>
+            <div id="titleErrorMessage" class="title-error-message">this should be present</div>
+            <div><input class="input" id="title" type="text" name="title" placeholder="e.g. Birth day"/></div>
+            <div id="dateErrorMessage" class="date-error-message">this format should be "2016-04-11"</div>
+            <div><input class="input" id="date" type="date" name="date" placeholder="e.g. 2011-10-02"/></div>
+            <div><input id="submit" type="submit" value="Submit"/></div>
         </form>
     </article>
 </div>
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script>
+    $("#submit").click(function(event){
+        $("#title").css("background-color", "");
+        $("#titleErrorMessage").hide();
+        $("#date").css("background-color", "");
+        $("#dateErrorMessage").hide();
+        var titleError = false;
+        var title = $("#title").val();
+        if (!title) {
+            $("#title").css("background-color", "#ffb6c1");
+            $("#titleErrorMessage").show();
+            titleError = true;
+        }
+        var date = $("#date").val();
+        var dateError = false;
+        if (!date) {
+            dateError = true;
+        } else {
+            if (!Date.parse(date)) {
+                dateError = true;
+            } else {
+                var pattern = /^\d{4}-\d{2}-\d{2}$/;
+                var match = pattern.exec(date);
+                if (!match) dateError = true;
+            }
+        }
+        if (dateError) {
+            $("#date").css("background-color", "#ffb6c1");
+            $("#dateErrorMessage").show();
+        }
+        if (titleError || dateError) {
+            event.preventDefault();
+        }
+    });
+</script>
 </body>
 </html>

@@ -34,6 +34,13 @@ input {
     max-width: 100%;
 }
 
+.title-error-message,
+.date-error-message {
+    color: red;
+    display: none;
+    font-size: 1.4rem;
+}
+
 .answer-box {
     font-size: 4rem;
     margin-bottom: 48px;
