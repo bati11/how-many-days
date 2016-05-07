@@ -5,6 +5,19 @@
     <title>Show</title>
 </head>
 <body>
-
+<div class="container" style="display: none">
+    <h1><span id="days"></span>&nbsp;days</h1>
+    <p>from {{ .Title }}</p>
+</div>
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"
+        integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+        crossorigin="anonymous"></script>
+<script>
+    var date = Date.parse({{ .Date }});
+    var diffMilliSec = new Date().getTime() - date;
+    var diffDays = diffMilliSec / (1000 * 60 * 60 * 24)
+    $("#days").text(Math.floor(diffDays))
+    $(".container").show();
+</script>
 </body>
 </html>

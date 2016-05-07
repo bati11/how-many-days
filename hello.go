@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"github.com/golang/appengine"
 	"github.com/golang/appengine/datastore"
-	"fmt"
 	"strconv"
 )
 
@@ -16,6 +15,7 @@ type Anniversary struct {
 }
 
 var inputPageTemplate = template.Must(template.ParseFiles("templates/input.html"))
+var showPageTemplate  = template.Must(template.ParseFiles("templates/show.html"))
 
 func init() {
 	http.HandleFunc("/", root)
@@ -50,5 +50,15 @@ func add(w http.ResponseWriter, r *http.Request) {
 }
 
 func show(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q", r.URL.Path[1:])
+	c := appengine.NewContext(r)
+	id, err := strconv.ParseInt(r.URL.Path[6:], 10, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var annversary Anniversary
+	datastore.Get(c, datastore.NewKey(c, "Anniversary", "", id, nil), &annversary)
+	if err := showPageTemplate.Execute(w, &annversary); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
