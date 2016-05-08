@@ -60,7 +60,12 @@
         $("#daysBox").show();
     }
     function showYears() {
-        var years = Math.floor(diffDays / 365);
+        var years;
+        if (diffDays >= 0) {
+            years = Math.floor(diffDays / 365);
+        } else {
+            years = Math.ceil(diffDays / 365);
+        }
         $("#yearsValue").text(years)
         $("#daysValue").text(Math.floor(diffDays) - (365 * years));
         if (years > 0) {
