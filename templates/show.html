@@ -43,7 +43,8 @@
             <div id="daysValue" class="value"></div>
             <div>&nbsp;days</div>
         </div>
-        <p>from <span class="title">{{ .Title }}</span></p>
+        <p>from</p>
+        <p class="title-box"><span class="title">{{ .Title }}</span>({{ .Date.Format "2006-01-02" }})</p>
         <div>
             <button id="showYears">years</button>
             <button id="showDays">days</button>

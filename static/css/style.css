@@ -69,6 +69,10 @@ input {
     font-size: 8rem;
 }
 
+.title-box {
+    word-break: break-all;
+}
+
 .title {
     color: #333;
     font-size: 4rem;
