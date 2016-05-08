@@ -37,6 +37,10 @@ func add(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "title should be present", http.StatusBadRequest)
 		return
 	}
+	if len(title) > 100 {
+		http.Error(w, "title length should be less than 100", http.StatusBadRequest)
+		return
+	}
 	date, err := time.Parse("2006-01-02", r.FormValue("date"))
 	if err != nil {
 		http.Error(w, "date format should be '2016-05-12'", http.StatusBadRequest)
