@@ -8,11 +8,11 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-<div class="container" style="display: none">
+<div class="container">
     <header class="header">
         <h1 class="logo"><a href="/">How many days</a></h1>
     </header>
-    <article class="contents">
+    <article class="contents" style="display: none">
         <div id="yearsBox" class="year-box">
             <div id="yearsValue" class="value"></div>
             <div>&nbsp;years</div>
@@ -54,7 +54,7 @@
     var diffMilliSec = new Date().getTime() - date;
     var diffDays = diffMilliSec / (1000 * 60 * 60 * 24)
     showDays();
-    $(".container").show();
+    $(".contents").show();
     $("#showDays").click(showDays);
     $("#showYears").click(showYears);
 </script>
