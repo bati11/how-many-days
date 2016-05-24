@@ -53,6 +53,13 @@
 </div>
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
 <script>
+    function diffDays(d1, d2) {
+        var diffMilliSec = d2 - d1;
+        return diffMilliSec / (1000 * 60 * 60 * 24)
+    }
+    function isLeapYear(year) {
+        return (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
+    }
     function showDays() {
         $("#daysValue").text(Math.floor(diffDays));
         $("#yearsBox").hide();
@@ -67,7 +74,17 @@
             years = Math.ceil(diffDays / 365);
         }
         $("#yearsValue").text(years)
-        $("#daysValue").text(Math.floor(diffDays) - (365 * years));
+
+        var leapYearCount = 0;
+        var y = new Date().getFullYear();
+        for (var i = 0; i < years; i++) {
+            if (isLeapYear(y)) leapYearCount = leapYearCount + 1;
+            y = y - 1;
+        }
+
+        var days = Math.floor(diffDays) - (365 * years) - leapYearCount;
+        $("#daysValue").text(days);
+
         if (years > 0) {
             $("#yearsBox").show();
             $("#andText").show();
@@ -77,9 +94,7 @@
         }
         $("#daysBox").show();
     }
-    var date = Date.parse({{ .Date }});
-    var diffMilliSec = new Date().getTime() - date;
-    var diffDays = diffMilliSec / (1000 * 60 * 60 * 24)
+    var diffDays = diffDays(Date.parse({{ .Date }}), new Date().getTime());
     showYears();
     $(".contents").show();
     $("#showDays").click(showDays);
